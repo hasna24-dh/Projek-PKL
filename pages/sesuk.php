@@ -61,29 +61,32 @@
             </div>
 
             <!-- Row: Charts -->
-            <div class="row mt-4 d-flex align-items-stretch">
+            <!-- Row: Charts -->
+          <div class="row mt-4 d-flex align-items-stretch">
               <div class="col-lg-6">
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-header">
-                    <h5 class="card-title fw-bold">Total Surat Masuk & Keluar</h5>
+                  <!-- Tambahkan h-100 di bawah ini -->
+                  <div class="card mb-4 shadow-sm h-100">
+                      <div class="card-header">
+                          <h5 class="card-title fw-bold">Total Surat Masuk & Keluar</h5>
+                      </div>
+                      <div class="card-body">
+                          <div id="chart-surat-masuk-keluar"></div>
+                      </div>
                   </div>
-                  <div class="card-body">
-                    <div id="chart-surat-masuk-keluar"></div>
-                  </div>
-                </div>
               </div>
 
               <div class="col-lg-6">
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-header">
-                    <h5 class="card-title fw-bold">Surat Masuk yang Terdisposisi & Belum</h5>
+                  <!-- Tambahkan h-100 di bawah ini -->
+                  <div class="card mb-4 shadow-sm h-100">
+                      <div class="card-header">
+                          <h5 class="card-title fw-bold">Surat Masuk yang Terdisposisi & Belum</h5>
+                      </div>
+                          <div class="card-body d-flex flex-column justify-content-center">
+                          <div id="chart-terdisposisi" class="w-100"></div>
+                      </div>
                   </div>
-                  <div class="card-body">
-                    <div id="chart-terdisposisi"></div>
-                  </div>
-                </div>
               </div>
-            </div>
+          </div>
 
             
 

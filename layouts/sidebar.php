@@ -5,11 +5,35 @@ $page = $_GET['page'] ?? '';
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
-          <a href="index.php" class="brand-link">
-            <img src="assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">SATUPINTU</span>
-          </a>
-        </div>
+  <a href="index.php" class="brand-link d-flex align-items-center">
+    <div class="brand-image-wrapper">
+      <img src="assets/img/Logo-Kota-.jpg" alt="AdminLTE Logo" class="brand-image-circle" />
+    </div>
+    <span class="brand-text fw-light">AdminLTE 4</span>
+  </a>
+</div>
+
+<style>
+  /* Menjamin wadah pembungkus memiliki dimensi yang tetap dan simetris (1:1) */
+  .brand-image-wrapper {
+    width: 40px;          /* Atur dimensi lebar sesuai kebutuhan */
+    height: 40px;         /* Atur dimensi tinggi sama dengan lebar */
+    overflow: hidden;     /* Memotong bagian gambar yang keluar dari lingkaran */
+    border-radius: 50%;   /* Membentuk wadah menjadi lingkaran sempurna */
+    display: inline-block;
+    margin-right: 10px;   /* Jarak antara ikon dan teks */
+    flex-shrink: 0;       /* Mencegah flexbox mereduksi ukuran wadah */
+  }
+
+  /* Menjamin gambar di dalam wadah beradaptasi secara proporsional */
+  .brand-image-circle {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* Memastikan gambar memenuhi wadah tanpa distorsi aspek rasio */
+    opacity: 0.75;
+  }
+</style>
+        
         <!--end::Sidebar Brand-->
         <!--begin::Sidebar Wrapper-->
         <div class="sidebar-wrapper d-flex flex-column h-100">

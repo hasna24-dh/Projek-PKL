@@ -1,4 +1,23 @@
-      <main class="app-main">
+<style>
+    /* Mengunci scroll samping HANYA pada area konten utama agar tidak merusak sidebar */
+    .app-main, .app-content {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Memastikan tabel dipaksa muat dan membungkus teks jika terlalu panjang */
+    .table {
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+
+    .table td, .table th {
+        white-space: normal !important; /* Membuat teks panjang otomatis turun ke bawah, bukan memanjang ke samping */
+        word-wrap: break-word !important;
+    }
+</style>  
+     <main class="app-main">
         <div class="app-content-header">
           <div class="container-fluid">
             <div class="row">
@@ -16,50 +35,48 @@
         </div>
 
         <div class="app-content">
-          <div class="container-fluid">
-            <!-- Row: Stats -->
-            <div class="row d-flex align-items-stretch">
-              <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
-                  <div class="inner">
-                    <h3 class="fw-bold">120</h3>
-                    <p>SPT (Tugas)</p>
-                  </div>
-                  <i class="small-box-icon bi bi-file-earmark-text"></i>
-                </div>
-              </div>
-
-              <div class="col-lg-3 col-md-6 col-12">
-                <div class="small-box text-bg-success h-100 mb-0 shadow-sm">
-                  <div class="inner">
-                    <h3 class="fw-bold">85</h3>
-                    <p>SPPD (Perjalanan)</p>
-                  </div>
-                  <i class="small-box-icon bi bi-geo-alt"></i>
-                </div>
-              </div>
-            </div>
+          
 
             <!-- Row: Chart -->
-            <div class="row mt-4">
+            <div class="row mt-1">
               <div class="col-12">
                 <div class="card mb-4 shadow-sm">
                   <div class="card-header">
-                    <h5 class="card-title fw-bold">Grafik SPT vs SPPD (Gabungan)</h5>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" onclick="window.location.reload();" title="Refresh">
-                        <i class="bi bi-arrow-clockwise"></i>
-                      </button>
-                    </div>
+                      <h5 class="card-title fw-bold">Grafik SPT vs SPPD (Gabungan)</h5>
                   </div>
-                  <div class="card-body">
-                    <div id="cadil-chart-gabungan"></div>
+                  <!-- Tambahkan class position-relative pada card-body -->
+                  <div class="card-body position-relative">
+                      
+                      <!-- Wadah Kotak Ringkasan di Pojok Kanan Atas -->
+                      <div class="d-flex gap-2" style="position: absolute; top: 15px; right: 15px; z-index: 10;">
+                          
+                          <!-- Kotak Mini 1: SPT (Tugas) -->
+                          
+    
+                      <!-- Kotak Kecil di Kanan -->
+                      <div class="d-flex gap-2">
+                          <div class="px-3 py-1 bg-light rounded border-start border-info border-3 text-center">
+                              <span style="font-size: 11px;" class="text-muted">SPT:</span>
+                              <strong style="font-size: 14px;">120</strong>
+                          </div>
+                          <div class="px-3 py-1 bg-light rounded border-start border-success border-3 text-center">
+                              <span style="font-size: 11px;" class="text-muted">SPPD:</span>
+                              <strong style="font-size: 14px;">85</strong>
+                          </div>
+                      </div>
                   </div>
-                </div>
+
+                      </div>
+
+                      <!-- Tempat Grafik Anda Rendring -->
+                      <div id="cadil-chart-gabungan"></div>
+                  </div>
               </div>
+             
             </div>
 
             <!-- Row: Table Karyawan Dinas Luar -->
+             
             <div class="row">
               <div class="col-12">
                 <div class="card mb-4 shadow-sm">
@@ -91,17 +108,17 @@
                             <td><span class="badge text-bg-success">Terbit</span></td>
                           </tr>
                           <!-- Baris data lainnya... -->
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                        <!-- Baris data lainnya... -->
+                </tbody>
+            </table>
+        </div> <!-- Penutup table-responsive / w-100 -->
+    </div> <!-- Penutup card-body -->
+</div> <!-- Penutup card -->
+</div> <!-- Penutup col-12 -->
+</div> <!-- Penutup row milik tabel -->
 
-          </div>
-        </div>
-      </main>
+</div> <!-- Penutup app-content (Ini yang membuat copyright kembali ke posisinya) -->
+</main>
 
 <?php
 // Menyuntikkan script chart (ApexCharts) spesifik hanya untuk file CADIL ini ke footer
@@ -110,15 +127,29 @@ ob_start();
 <script>
   const cadilChartOptions = {
     series: [
-      { name: 'SPT (Tugas)', data: [8, 12, 10, 14, 18, 16] },
-      { name: 'SPPD (Perjalanan)', data: [6, 9, 8, 11, 13, 10] },
+      { name: 'SPT (Tugas)', data: [8, 12, 10, 14, 18, 16, 0, 0, 0, 0, 0, 0] },
+      { name: 'SPPD (Perjalanan)', data: [6, 9, 8, 11, 13, 10, 0, 0, 0, 0, 0, 0] },
     ],
     chart: { type: 'line', height: 340, toolbar: { show: false } },
-    colors: ['#0d6efd', '#198754'],
+    colors: ['#00d6fd', '#198754'],
     stroke: { curve: 'smooth', width: 3 },
     markers: { size: 4 },
-    xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'] },
-    legend: { position: 'top' },
+    xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'] },
+    legend: { 
+      position: 'top', 
+      horizontalAlign: 'left',
+      offsetY: -10 // Angka minus akan memaksa teks legenda naik lebih tinggi ke arah judul
+    },
+    grid: {
+      padding: {
+        top: 0
+      }
+    },
+    // TAMBAHKAN BLOK KODE YAXIS INI DI SINI
+    yaxis: {
+      max: 19, // Mengunci batas atas grafik di angka 19 (pas di atas angka tertinggi 18)
+      tickAmount: 4, // Membuat pembagian skala menjadi 4 tingkatan rapi di kiri
+    },
     dataLabels: { enabled: false },
     tooltip: { y: { formatter: (val) => `${val} Surat` } }
   };

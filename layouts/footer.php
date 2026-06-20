@@ -1,11 +1,11 @@
       <footer class="app-footer">
         <div class="float-end d-none d-sm-inline">Versi 1.0</div>
         <strong>
-          Copyright &copy; <?= date('Y') ?>&nbsp; <a href="#" class="text-decoration-none">SATUPINTU | Disnakerinkompak</a>.
+          Copyright &copy; <?= date('Y') ?>&nbsp; <a href="#" class="text-decoration-none">SATUPINTU | disnakerinkompak</a>.
         </strong>
         All rights reserved.
       </footer>
-    </div>
+    
     <!--end::App Wrapper-->
 
     <!-- Scripts -->
