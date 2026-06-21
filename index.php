@@ -1,42 +1,30 @@
 <?php
-// Uncomment jika database dibutuhkan dari awal di setiap halaman
-// require_once 'config/koneksi.php'; 
+// require_once 'config/koneksi.php';
 
-// Cek parameter page, defaultnya 'dashboard'
-$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+$page = (isset($_GET['page']) && trim($_GET['page']) !== '') ? $_GET['page'] : 'dashboard';
 
-// Daftar Title halaman otomatis
 $titles = [
     'dashboard' => 'Beranda',
-    'sesuk' => 'SESUK',
-    'cadil' => 'CADIL',
+    'sesuk'     => 'SESUK',
+    'cadil'     => 'CADIL',
     'elenopeda' => 'ELENOPEDA',
     'laporan_industri' => 'Laporan Industri'
 ];
+
 $title = $titles[$page] ?? 'Halaman Tidak Ditemukan';
 
-// Memanggil Layouts Atas
+// Include struktur template atas
 include 'layouts/header.php';
 include 'layouts/navbar.php';
 include 'layouts/sidebar.php';
 
-// Memanggil Konten
+// 2. Tentukan jalur file konten di dalam folder pages/
 $file = 'pages/' . $page . '.php';
-if (file_exists($file)) {
+if (file_exists($file) && $page !== '') {
     include $file;
 } else {
-    // 404 Fallback
-    echo "
-    <main class='app-main'>
-        <div class='app-content-header'>
-            <div class='container-fluid text-center mt-5'>
-                <h1>404 - Halaman Tidak Ditemukan</h1>
-                <p>Halaman '{$page}' tidak tersedia.</p>
-            </div>
-        </div>
-    </main>";
+    include 'pages/dashboard.php';
 }
 
-// Memanggil Layouts Bawah
 include 'layouts/footer.php';
 ?>

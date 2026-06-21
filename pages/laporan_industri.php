@@ -6,10 +6,19 @@
                 <h3 class="mb-0 fw-bold">DBES-IKM</h3>
               </div>
               <div class="col-sm-6 text-end">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">DBES-IKM</li>
-                </ol>
+                <div class="col-12 d-flex justify-content-end align-items-center gap-2">
+                <!-- Input Group Kalender -->
+                <div class="input-group input-group-sm" style="max-width: 180px;">
+                    <span class="input-group-text bg-white border-end-0" id="date-filter-icon">
+                        <i class="bi bi-calendar-event text-muted"></i>
+                    </span>
+                    <input type="date" id="elenopeda-date-filter" class="form-control border-start-0 ps-0 text-muted" value="<?= date('Y-m-d') ?>" aria-describedby="date-filter-icon">
+                </div>
+                <!-- Tombol Filter Utama -->
+                <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">
+                    <span>Filter</span>
+                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -20,7 +29,7 @@
             <!-- Row: Key summary -->
             <div class="row d-flex align-items-stretch">
               <div class="col-lg-3 col-6">
-                <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
+                <div class="small-box text-bg-danger h-100 mb-0 shadow-sm">
                   <div class="inner">
                     <h3 class="fw-bold">1250</h3>
                     <p>Jumlah IKM</p>
@@ -38,7 +47,7 @@
                 </div>
               </div>
               <div class="col-lg-3 col-6">
-                <div class="small-box text-bg-info h-100 mb-0 shadow-sm">
+                <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
                   <div class="inner">
                     <h3 class="fw-bold">24%</h3>
                     <p>Skala Industri Menengah</p>
@@ -60,31 +69,31 @@
             <!-- Row: Charts -->
             <div class="row mt-4 d-flex align-items-stretch">
               <div class="col-lg-6">
-                <div class="card mb-4 shadow-sm">
+                 <div class="card mb-4 shadow-sm" style="height: 380px;"> 
                   <div class="card-header">
                     <h5 class="card-title fw-bold">Skala Industri (Kecil, Menengah, Besar)</h5>
                   </div>
                   <div class="card-body">
                     <div style="overflow-x: auto; overflow-y: hidden;">
-                      <div id="skala-industri-chart" style="min-width: 500px;"></div>
+                      <div id="skala-industri-chart" ></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-6">
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-header">
-                    <h5 class="card-title fw-bold">Jumlah IKM (Ringkas)</h5>
-                  </div>
-                  <div class="card-body">
-                    <div id="jumlah-ikm-chart"></div>
-                  </div>
+             <!-- KOTAK KANAN: JUMLAH IKM (RINGKAS) -->
+            <div class="col-lg-6">
+                <div class="card mb-4 shadow-sm" style="height: 380px;"> 
+                    <div class="card-header">
+                        <h5 class="card-title fw-bold">Jumlah IKM (Ringkas)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="jumlah-ikm-chart"></div>
+                    </div>
                 </div>
-              </div>
             </div>
 
-            <div class="row mt-0">
+            <div class="row mt-4">
               <div class="col-12">
                 <div class="card mb-4 shadow-sm">
                   <div class="card-header">
@@ -112,7 +121,6 @@
       </main>
 
 <?php
-// Menyuntikkan script chart (ApexCharts) spesifik hanya untuk file laporan_industri ini ke footer
 ob_start();
 ?>
 <script>
@@ -122,11 +130,17 @@ ob_start();
     chart: { type: 'donut', height: 320 },
     labels: ['Kecil', 'Menengah', 'Besar'],
     colors: ['#0d6efd', '#198754', '#ffc107'],
-    dataLabels: { enabled: false },
-    legend: { position: 'bottom' },
-    tooltip: {
-      y: { formatter: (val) => `${val}%` }
-    }
+    dataLabels: { enabled: true, style: { fontSize: '10px', fontWeight: 'bold', colors: ['#ffffff'] }, },
+    legend: { position: 'bottom', horizontalAlign: 'center',  itemMargin: { horizontal: 10, vertical: 5 } },
+    plotOptions: { pie: { offsetY: 10, donut: { labels: { show: false } } } },
+    tooltip: { enabled: true, theme: 'light', fillSeriesColor: false, style: { fontSize: '12px' },
+    y: { formatter: function(val, opts) {
+        let total = opts.globals.series.reduce((a, b) => a + b, 0);
+        let percent = ((val / total) * 100).toFixed(0);
+        return val + " (" + percent + "%)"; },
+        title: { formatter: function(seriesName) { return seriesName + ':'; } }
+      }
+    },
   };
   new ApexCharts(document.querySelector('#skala-industri-chart'), skalaIndustriOptions).render();
 
@@ -134,15 +148,9 @@ ob_start();
   const jumlahIkmOptions = {
     series: [{ name: 'Jumlah IKM', data: [775, 300, 175] }],
     chart: { type: 'bar', height: 280, toolbar: { show: false } },
-    plotOptions: {
-        bar: { horizontal: true, borderRadius: 6, dataLabels: { position: 'center' } }
-    },
-    dataLabels: {
-        enabled: true,
-        formatter: function (val) { return val; },
-        style: { colors: ['#ffffff'] }
-    },
-    colors: ['#0d6efd', '#198754', '#ffc107'], // Kode warna Bootstrap standar yang valid (Biru, Hijau, Kuning)
+    plotOptions: { bar: { horizontal: true, borderRadius: 6, dataLabels: { position: 'center' }, offsetY:45, offsetX: -15 } },
+    dataLabels: { enabled: true, formatter: function (val) { return val; }, style: { colors: ['#ffffff'] }},
+    colors: ['#0d6efd', '#198754', '#ffc107'],
     xaxis: { categories: ['Kecil', 'Menengah', 'Besar'] },
     tooltip: { y: { formatter: (val) => `${val} IKM` } }
   };
@@ -153,7 +161,7 @@ ob_start();
     series: [{ name: 'Jumlah IKM', data: [120, 95, 180, 70, 140, 60] }],
     chart: { type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: { horizontal: false, columnWidth: '50%', borderRadius: 4 } },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     colors: ['#198754'],
     xaxis: { categories: ['KBLI A', 'KBLI B', 'KBLI C', 'KBLI D', 'KBLI E', 'KBLI F'], tickPlacement: 'on' },
     yaxis: { labels: { formatter: (val) => val } },

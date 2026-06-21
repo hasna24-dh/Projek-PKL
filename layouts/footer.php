@@ -5,7 +5,7 @@
         </strong>
         All rights reserved.
       </footer>
-    
+    </div>
     <!--end::App Wrapper-->
 
     <!-- Scripts -->

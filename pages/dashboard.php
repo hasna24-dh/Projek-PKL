@@ -1,70 +1,29 @@
 <main class="app-main">
-    <!-- Header Hero: Identitas Portal Kantor -->
-    
-
-    <!-- Konten Header Bawaan AdminLTE -->
 <div class="app-content-header py-4 mb-3 border-bottom bg-white">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-sm-8">
-                <h3 class="fw-bold text-dark mb-1">
-                    <i class="bi bi-shield-shaded text-primary me-2"></i> PORTAL MONITORING SISTEM TERPADU
-                </h3>
-                <p class="mb-0 text-muted small">Pusat integrasi, pemantauan data, dan akses cepat seluruh aplikasi operasional kantor.</p>
+                <h2 class="fw-bold text-dark mb-1">
+                    PORTAL MONITORING SATUPINTU
+                </h2>
+                <p class="mb-0 text-muted small">Silakan pilih menu pada panel sebelah kiri untuk mengatur konten, memantau sinkronisasi data, atau mengakses sub-aplikasi operasional: SESUK, CADIL, ELENOPEDA, dan Laporan Industri.</p>
             </div>
             <div class="col-sm-4 text-sm-end mt-2 mt-sm-0">
-                <span class="badge text-bg-dark p-2">
-                    <i class="bi bi-calendar3 me-2"></i><?= date('d M Y') ?>
-                </span>
+                <div class="bg-white px-3 py-2 shadow-sm rounded-pill d-flex align-items-center border">
+                 <i class="bi bi-clock-fill text-primary me-2"></i>
+                    <span id="live-clock" class="fw-bold text-dark font-monospace me-2" style="font-size: 14px;">00:00:00</span>
+                    <span class="text-muted me-2">|</span>
+                    <span id="live-date-sub" class="text-muted small fw-medium">Memuat tanggal...</span>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Konten Utama Bawaan AdminLTE -->
 <div class="app-content">
     <div class="container-fluid">
-        
         <!-- Baris 1: Rangkuman Statistik Cepat -->
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box text-bg-primary mb-3 shadow-sm border-0">
-                    <span class="info-box-icon"><i class="bi bi-people-fill"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Total Data SESUK</span>
-                        <span class="info-box-number">1,250</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box text-bg-success mb-3 shadow-sm border-0">
-                    <span class="info-box-icon"><i class="bi bi-graph-up-arrow"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Total Data CADIL</span>
-                        <span class="info-box-number">840</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box text-bg-warning text-white mb-3 shadow-sm border-0">
-                    <span class="info-box-icon"><i class="bi bi-file-earmark-text"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Data ELENOPEDA</span>
-                        <span class="info-box-number">420</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box text-bg-danger mb-3 shadow-sm border-0">
-                    <span class="info-box-icon"><i class="bi bi-building-fill"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Laporan Industri</span>
-                        <span class="info-box-number">150</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+       
         <!-- Baris 2: Jalur Pintas & Live Status -->
         <div class="row mt-3">
             <!-- Sisi Kiri: Jalur Pintas -->
@@ -72,7 +31,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-transparent border-bottom py-3">
                         <h5 class="card-title fw-bold mb-0 text-dark">
-                            <i class="bi bi-box-arrow-up-right text-primary me-2"></i> Jalur Pintas Aplikasi Luar
+                            <i class="bi bi-box-arrow-up-right text-primary me-2"></i> Jalur Pintas Aplikasi
                         </h5>
                     </div>
                     <div class="card-body bg-light-50">
@@ -107,7 +66,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Sisi Rangan: Live Status -->
             <div class="col-lg-4">
                 <div class="card mb-4 shadow-sm">
@@ -137,7 +95,33 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 </main>
+<script>
+function initLiveClockGlobal() {
+    const clockEl = document.getElementById('live-clock');
+    const dateSubEl = document.getElementById('live-date-sub');
+    
+    function update() {
+        const now = new Date();
+        
+        if (clockEl) {
+            clockEl.textContent = now.toLocaleTimeString('id-ID', { 
+                hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            });
+        }
+        
+        if (dateSubEl) {
+            dateSubEl.textContent = now.toLocaleDateString('id-ID', { 
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+            });
+        }
+    }
+    
+    setInterval(update, 1000);
+    update();
+}
+
+document.addEventListener('DOMContentLoaded', initLiveClockGlobal);
+</script>

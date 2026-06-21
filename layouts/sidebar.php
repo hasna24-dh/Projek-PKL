@@ -1,41 +1,32 @@
 <?php
 $page = $_GET['page'] ?? '';
 ?>
-      <!--begin::Sidebar-->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
-  <a href="index.php" class="brand-link d-flex align-items-center">
-    <div class="brand-image-wrapper">
-      <img src="assets/img/Logo-Kota-.jpg" alt="AdminLTE Logo" class="brand-image-circle" />
-    </div>
-    <span class="brand-text fw-light">AdminLTE 4</span>
-  </a>
-</div>
-
+          <a href="index.php" class="brand-link d-flex align-items-center">
+            <div class="brand-image-wrapper">
+              <img src="assets/img/Logo-Kota-.jpg" alt="AdminLTE Logo" class="brand-image-circle" />
+            </div>
+              <span class="brand-text fw-light">SATUPINTU</span>
+          </a>
+      </div>
 <style>
-  /* Menjamin wadah pembungkus memiliki dimensi yang tetap dan simetris (1:1) */
   .brand-image-wrapper {
-    width: 40px;          /* Atur dimensi lebar sesuai kebutuhan */
-    height: 40px;         /* Atur dimensi tinggi sama dengan lebar */
-    overflow: hidden;     /* Memotong bagian gambar yang keluar dari lingkaran */
-    border-radius: 50%;   /* Membentuk wadah menjadi lingkaran sempurna */
+    width: 40px;          
+    height: 40px;         
+    overflow: hidden;     
+    border-radius: 50%;   
     display: inline-block;
-    margin-right: 10px;   /* Jarak antara ikon dan teks */
-    flex-shrink: 0;       /* Mencegah flexbox mereduksi ukuran wadah */
+    margin-right: 10px;  
+    flex-shrink: 0;   
   }
-
-  /* Menjamin gambar di dalam wadah beradaptasi secara proporsional */
   .brand-image-circle {
     width: 100%;
     height: 100%;
-    object-fit: cover;    /* Memastikan gambar memenuhi wadah tanpa distorsi aspek rasio */
+    object-fit: cover;  
     opacity: 0.75;
   }
 </style>
-        
-        <!--end::Sidebar Brand-->
-        <!--begin::Sidebar Wrapper-->
         <div class="sidebar-wrapper d-flex flex-column h-100">
           <nav class="mt-2" aria-label="Main navigation">
             <!--begin::Sidebar Menu-->
@@ -46,7 +37,6 @@ $page = $_GET['page'] ?? '';
                   <p>BERANDA</p>
                 </a>
               </li>
-              
               <!-- Menu SATUKAN JIWA -->
               <li class="nav-item <?= in_array($page, ['dashboard', 'sesuk', 'cadil', 'elenopeda', 'laporan_industri']) ? 'menu-open' : '' ?>">
                 <a href="#" class="nav-link <?= in_array($page, ['dashboard','sesuk', 'cadil', 'elenopeda', 'laporan_industri']) ? 'active' : '' ?>">
@@ -77,7 +67,6 @@ $page = $_GET['page'] ?? '';
                   </li>
                 </ul>
               </li>
-              
               <!-- Menu DBES-IKM -->
               <li class="nav-item <?= in_array($page, ['dashboard', 'sesuk', 'cadil', 'elenopeda', 'laporan_industri']) ? 'menu-open' : '' ?>">
                 <a href="#" class="nav-link <?= in_array($page, ['dashboard', 'sesuk', 'cadil', 'elenopeda', 'laporan_industri']) ? 'active' : '' ?>">
@@ -97,13 +86,10 @@ $page = $_GET['page'] ?? '';
                 </ul>
               </li>
             </ul>
-            <!--end::Sidebar Menu-->
-
-            <!-- Docs CTA (bottom of sidebar) -->
             <div class="p-3 mt-3 border-top border-secondary border-opacity-25 dropup">
               <button class="btn btn-sm btn-outline-light w-100 dropdown-toggle d-flex align-items-center justify-content-center gap-2" 
                       type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-book"></i> Tautan Halaman
+                      <i class="bi bi-book"></i> Tautan Halaman
               </button>
               <ul class="dropdown-menu dropdown-menu-dark w-100 shadow">
                   <li><a class="dropdown-item" href="http://192.168.34.169/satukan.jiwa/ "><i class="bi bi-file-earmark"></i> Satukan Jiwa</a></li>
@@ -112,6 +98,4 @@ $page = $_GET['page'] ?? '';
             </div>
           </nav>
         </div>
-        <!--end::Sidebar Wrapper-->
       </aside>
-      <!--end::Sidebar-->

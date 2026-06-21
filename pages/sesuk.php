@@ -6,10 +6,19 @@
                 <h3 class="mb-0 fw-bold">SESUK</h3>
               </div>
               <div class="col-sm-6 text-end">
-                <ol class="breadcrumb float-sm-end">
-                  <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">SESUK</li>
-                </ol>
+                <div class="col-12 d-flex justify-content-end align-items-center gap-2">
+                <!-- Input Group Kalender -->
+                <div class="input-group input-group-sm" style="max-width: 180px;">
+                    <span class="input-group-text bg-white border-end-0" id="date-filter-icon">
+                        <i class="bi bi-calendar-event text-muted"></i>
+                    </span>
+                    <input type="date" id="elenopeda-date-filter" class="form-control border-start-0 ps-0 text-muted" value="<?= date('Y-m-d') ?>" aria-describedby="date-filter-icon">
+                </div>
+                <!-- Tombol Filter Utama -->
+                <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">  
+                    <span>Filter</span>
+                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -61,7 +70,6 @@
             </div>
 
             <!-- Row: Charts -->
-            <!-- Row: Charts -->
           <div class="row mt-4 d-flex align-items-stretch">
               <div class="col-lg-6">
                   <!-- Tambahkan h-100 di bawah ini -->
@@ -87,15 +95,9 @@
                   </div>
               </div>
           </div>
-
-            
-
-          </div>
-        </div>
       </main>
 
 <?php
-// Menyuntikkan script chart (ApexCharts) spesifik hanya untuk file SESUK ini ke footer
 ob_start();
 ?>
 <script>
@@ -114,51 +116,21 @@ ob_start();
 
   // Terdisposisi vs Belum
   const chartTerdisposisiOptions = {
-    series: [320, 180],
-   chart: { 
-    type: 'pie', 
-    height: 320,
-    events: {
-      dataPointSelection: function(event, chartContext, config) {
-        // Mengambil nama label ('Terdisposisi' atau 'Belum Terdisposisi')
-        let label = config.w.config.labels[config.dataPointIndex];
-        // Mengambil jumlah angka asli (320 atau 180)
-        let value = config.w.config.series[config.dataPointIndex];
-        // Mengambil total seluruh data (500)
-        let total = config.w.config.series.reduce((a, b) => a + b, 0);
-        // Menghitung persen
-        let percent = ((value / total) * 100).toFixed(0);
-        
-        // Memunculkan pesan pop-up keterangan saat diklik
-        alert(`Keterangan Surat:\nStatus: ${label}\nJumlah: ${value} surat (${percent}%)`);
-      }
-    }
-  },
+    series: [320, 180], chart: { type: 'pie',  height: 320, },
     labels: ['Terdisposisi', 'Belum Terdisposisi'],
     colors: ['#ffc107', '#dc3545'],
     dataLabels: { enabled: true },
     legend: { position: 'bottom' },
-    tooltip: {
-    enabled: true,
-    theme: 'light',
-    fillSeriesColor: false, // Wajib ditambahkan agar latar belakang kotak tetap putih, tidak mengikuti warna diagram
-    style: {
-      fontSize: '12px',
-      fontFamily: undefined
-    },
-    y: {
-      formatter: function(val, opts) {
-        let total = opts.globals.series.reduce((a, b) => a + b, 0);
-        let percent = ((val / total) * 100).toFixed(0);
-        return `${val} surat (${percent}%)`;
-      },
-      title: {
-        formatter: function() {
-          return 'Jumlah Surat:';
+    tooltip: { enabled: true, theme: 'light',  fillSeriesColor: false, 
+        style: {  fontSize: '12px', fontFamily: undefined },
+        y: {
+          formatter: function(val, opts) {
+            let total = opts.globals.series.reduce((a, b) => a + b, 0);
+            let percent = ((val / total) * 100).toFixed(0);
+            return `${val} surat (${percent}%)`; },
+          title: {  formatter: function() {  return 'Jumlah Surat:'; } }
         }
-      }
-    }
-  }
+     }
   };
   new ApexCharts(document.querySelector('#chart-terdisposisi'), chartTerdisposisiOptions).render();
 </script>
