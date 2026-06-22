@@ -1,3 +1,8 @@
+<?php
+$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+$response=file_get_contents($url);
+$data=json_decode($response,true);
+?>      
       <main class="app-main">
         <div class="app-content-header">
           <div class="container-fluid">
@@ -8,16 +13,16 @@
               <div class="col-sm-6 text-end">
                 <div class="col-12 d-flex justify-content-end align-items-center gap-2">
                 <!-- Input Group Kalender -->
-                <div class="input-group input-group-sm" style="max-width: 180px;">
+                <!-- <div class="input-group input-group-sm" style="max-width: 180px;">
                     <span class="input-group-text bg-white border-end-0" id="date-filter-icon">
                         <i class="bi bi-calendar-event text-muted"></i>
                     </span>
                     <input type="date" id="elenopeda-date-filter" class="form-control border-start-0 ps-0 text-muted" value="<?= date('Y-m-d') ?>" aria-describedby="date-filter-icon">
-                </div>
+                </div> -->
                 <!-- Tombol Filter Utama -->
-                <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">
+                <!-- <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">
                     <span>Filter</span>
-                </button>
+                </button> -->
                 </div>
               </div>
             </div>
