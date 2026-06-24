@@ -36,7 +36,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php //echo $data['jml_surat_masuk'];?></h3>
+                    <h3 class="fw-bold"><?php echo $data['jml_surat_masuk'];?></h3>
                     <p>Total Surat Masuk</p>
                   </div>
                   <i class="small-box-icon bi bi-inbox-fill"></i>
@@ -46,7 +46,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-success h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php //echo $data['jml_surat_keluar'];?></h3>
+                    <h3 class="fw-bold"><?php echo $data['jml_surat_keluar'];?></h3>
                     <p>Total Surat Keluar</p>
                   </div>
                   <i class="small-box-icon bi bi-box-arrow-up-right"></i>
@@ -56,7 +56,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-warning h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php //echo $data['jml_disposisi'];?></h3>
+                    <h3 class="fw-bold"><?php echo $data['jml_disposisi'];?></h3>
                     <p>Terdisposisi</p>
                   </div>
                   <i class="small-box-icon bi bi-person-check-fill"></i>
@@ -66,7 +66,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-danger h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php //echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?></h3>
+                    <h3 class="fw-bold"><?php echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?></h3>
                     <p>Belum Terdisposisi</p>
                   </div>
                   <i class="small-box-icon bi bi-person-dash-fill"></i>
@@ -108,7 +108,7 @@ ob_start();
 <script>
   // Total Surat Masuk vs Keluar
   const chartSuratMasukKeluarOptions = {
-    series: [{ name: 'Jumlah Surat', data: [<?php //echo $data['jml_surat_masuk'];?>, <?php //echo $data['jml_surat_keluar'];?>] }],
+    series: [{ name: 'Jumlah Surat', data: [<?php echo $data['jml_surat_masuk'];?>, <?php echo $data['jml_surat_keluar'];?>] }],
     chart: { type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: { borderRadius: 6, horizontal: true } },
     colors: ['#0d6efd', '#198754'],
@@ -121,7 +121,7 @@ ob_start();
 
   // Terdisposisi vs Belum
   const chartTerdisposisiOptions = {
-    series: [<?php //echo $data['jml_disposisi'];?>, <?php //echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?>], chart: { type: 'pie',  height: 320, },
+    series: [<?php echo $data['jml_disposisi'];?>, <?php echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?>], chart: { type: 'pie',  height: 320, },
     labels: ['Terdisposisi', 'Belum Terdisposisi'],
     colors: ['#ffc107', '#dc3545'],
     dataLabels: { enabled: true },

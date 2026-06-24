@@ -36,7 +36,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-danger h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">1250</h3>
+                    <h3 class="fw-bold"><?php echo $data['total_ikm'];?></h3>
                     <p>Jumlah IKM</p>
                   </div>
                   <i class="small-box-icon bi bi-buildings-fill"></i>
@@ -45,7 +45,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-success h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">62%</h3>
+                    <h3 class="fw-bold"><?php echo $data['ikm_kecil'];?></h3>
                     <p>Skala Industri Kecil</p>
                   </div>
                   <i class="small-box-icon bi bi-person-workspace"></i>
@@ -54,7 +54,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">24%</h3>
+                    <h3 class="fw-bold"><?php echo $data['ikm_menengah'];?></h3>
                     <p>Skala Industri Menengah</p>
                   </div>
                   <i class="small-box-icon bi bi-graph-up-arrow"></i>
@@ -63,7 +63,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-warning h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">14%</h3>
+                    <h3 class="fw-bold"><?php echo $data['ikm_besar'];?></h3>
                     <p>Skala Industri Besar</p>
                   </div>
                   <i class="small-box-icon bi bi-building"></i>
@@ -153,7 +153,7 @@ ob_start();
 <script>
   // Skala Industri chart (donut)
   const skalaIndustriOptions = {
-    series: [<?php //echo $data['ikm_kecil'];?>, <?php //echo $data['ikm_menengah'];?>, <?php //echo $data['ikm_besar'];?>],
+    series: [<?php echo $data['ikm_kecil'];?>, <?php echo $data['ikm_menengah'];?>, <?php echo $data['ikm_besar'];?>],
     chart: { type: 'donut', height: 320 },
     labels: ['Kecil', 'Menengah', 'Besar'],
     colors: ['#0d6efd', '#198754', '#ffc107'],
@@ -173,7 +173,7 @@ ob_start();
 
   // Jumlah IKM chart (bar)
   const jumlahIkmOptions = {
-    series: [{ name: 'Jumlah IKM', data: [<?php //echo $data['ikm_kecil'];?>, <?php //echo $data['ikm_menengah'];?>, <?php //echo $data['ikm_besar'];?>] }],
+    series: [{ name: 'Jumlah IKM', data: [<?php echo $data['ikm_kecil'];?>, <?php echo $data['ikm_menengah'];?>, <?php echo $data['ikm_besar'];?>] }],
     chart: { type: 'bar', height: 280, toolbar: { show: false } },
     plotOptions: { bar: { horizontal: true, borderRadius: 6, dataLabels: { position: 'center' }, offsetY:45, offsetX: -15 } },
     dataLabels: { enabled: true, formatter: function (val) { return val; }, style: { colors: ['#ffffff'] }},
