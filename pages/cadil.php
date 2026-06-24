@@ -1,7 +1,7 @@
-<?php
-$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
-$response=file_get_contents($url);
-$data=json_decode($response,true);
+//<?php
+//$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+//$response=file_get_contents($url);
+//$data=json_decode($response,true);
 ?>
 <style>
     .app-main, .app-content {
@@ -66,12 +66,12 @@ $data=json_decode($response,true);
                           <!-- Kotak Total SPT -->
                           <div class="px-3 py-1 bg-light rounded border-start border-info border-3 text-center shadow-sm">
                               <span style="font-size: 11px;" class="text-muted">TOTAL SPT: </span>
-                              <strong style="font-size: 14px;">120</strong>
+                              <strong style="font-size: 14px;"><?php echo $data['total_spt'];?></strong>
                           </div>
                           <!-- Kotak Total SPPD -->
                           <div class="px-3 py-1 bg-light rounded border-start border-success border-3 text-center shadow-sm">
                               <span style="font-size: 11px;" class="text-muted">TOTAL SPPD: </span>
-                              <strong style="font-size: 14px;">85</strong>
+                              <strong style="font-size: 14px;"><?php echo $data['total_sppd'];?></strong>
                               </div>
                           </div>
                       </div>

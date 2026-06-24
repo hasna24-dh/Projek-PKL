@@ -26,7 +26,7 @@ $data=json_decode($response,true);
                 </div>
               </div>
             </div>
-          </div>
+          </div> 
         </div>
 
         <div class="app-content">
