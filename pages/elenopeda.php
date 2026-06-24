@@ -1,5 +1,5 @@
 <?php
-$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+$url="http://192.168.34.169:8080/satukan.jiwa/elenopeda/index.php/api_dashboard"; //udah sesuai
 $response=file_get_contents($url);
 $data=json_decode($response,true);
 ?>      
@@ -36,7 +36,7 @@ $data=json_decode($response,true);
             <div class="col-xl-4 col-lg-4 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-primary h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;">Rp 1.250.000.000</h3>
+                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;"><?php //echo $data['total_dana'];?></h3>
                         <p class="text-nowrap" style="font-size: 0.9rem; margin-bottom: 0;">Total Pengajuan Dana</p>
                     </div>
                     <i class="small-box-icon text-bg-primary bi bi-cash-stack"></i>
@@ -46,7 +46,7 @@ $data=json_decode($response,true);
             <div class="col-xl-2 col-lg-2 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-warning h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold">360</h3>
+                        <h3 class="fw-bold"><?php //echo $data['total_npd'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">Total NPD</p>
                     </div>
                     <i class="small-box-icon bi bi-file-earmark-text-fill"></i>
@@ -56,7 +56,7 @@ $data=json_decode($response,true);
             <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-success h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold">240</h3>
+                        <h3 class="fw-bold"><?php //echo $data['npd_verifikasi'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Terverifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-check-fill"></i>
@@ -66,7 +66,7 @@ $data=json_decode($response,true);
             <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-danger h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold">120</h3>
+                        <h3 class="fw-bold"><?php //echo $data['npd_belum'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Belum Verifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-exclamation-fill"></i>
@@ -104,7 +104,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #0d6efd; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;">10</h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_program'];?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Program</p>
                       </div>
                       <div class="text-primary">
@@ -117,7 +117,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #198754; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;">45</h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_kegiatan'];?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Kegiatan</p>
                       </div>
                       <div class="text-success">
@@ -130,7 +130,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #dc3545; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;">120</h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_sub_kegiatan'];?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Sub Kegiatan</p>
                       </div>
                       <div class="text-danger">
@@ -149,7 +149,7 @@ ob_start();
 document.addEventListener("DOMContentLoaded", () => {
   // Chart 1: Status Verifikasi NPD (Donut Chart)
   const chartVerifikasiOptions = {
-    series: [240, 120], // Data: [Terverifikasi, Belum Terverifikasi]
+    series: [<?php //echo $data['npd_verifikasi'];?>, <?php //echo $data['npd_belum'];?>], // Data: [Terverifikasi, Belum Terverifikasi]
     chart: { type: 'donut', height: 320 },
     labels: ['NPD Terverifikasi', 'NPD Belum Verifikasi'],
     colors: ['#198754', '#dc3545'], 
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartStrukturOptions = {
     series: [{
       name: 'Jumlah',
-      data: [10, 45, 120] // Data: [Program, Kegiatan, Sub Kegiatan]
+      data: [<?php //echo $data['jml_program'];?>, <?php //echo $data['jml_kegiatan'];?>, <?php //echo $data['jml_sub_kegiatan'];?>] // Data: [Program, Kegiatan, Sub Kegiatan]
     }],
     chart: {  type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: {  borderRadius: 4,  horizontal: false, columnWidth: '50%', } },

@@ -1,5 +1,5 @@
 <?php
-$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+$url="http://192.168.34.169/satukan.jiwa/cadil/index.php/api_dashboard";
 $response=file_get_contents($url);
 $data=json_decode($response,true);
 ?>
@@ -47,15 +47,16 @@ $data=json_decode($response,true);
               <div class="col-12">
                 <div class="card mb-4 shadow-sm">
                 <div class="card-header">
-                  <h5 class="card-title fw-bold mb-0">Grafik SPT & SPPD (Gabungan)</h5>
+                  <h5 class="card-title fw-bold mb-0">Grafik SPPD</h5>
               </div>
               <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
                       <div class="d-flex align-items-center gap-3">
-                          <div class="d-flex align-items-center gap-2">
+                        <!-- sppt tidak digunakan -->
+                          <!-- <div class="d-flex align-items-center gap-2">
                               <span class="rounded-circle" style="width: 12px; height: 12px; background-color: #00ddfd; display: inline-block;"></span>
                               <span style="font-size: 13px; color: #475569;" class="fw-medium">SPT (Tugas)</span>
-                          </div>
+                          </div> -->
                           <div class="d-flex align-items-center gap-2">
                               <span class="rounded-circle" style="width: 12px; height: 12px; background-color: #019875; display: inline-block;"></span>
                               <span style="font-size: 13px; color: #475569;" class="fw-medium">SPPD (Perjalanan)</span>
@@ -64,14 +65,14 @@ $data=json_decode($response,true);
                       <!-- Sisi Kanan: Kotak Total Dinamis -->
                       <div class="d-flex gap-2">
                           <!-- Kotak Total SPT -->
-                          <div class="px-3 py-1 bg-light rounded border-start border-info border-3 text-center shadow-sm">
+                          <!-- <div class="px-3 py-1 bg-light rounded border-start border-info border-3 text-center shadow-sm">
                               <span style="font-size: 11px;" class="text-muted">TOTAL SPT: </span>
-                              <strong style="font-size: 14px;">120</strong>
-                          </div>
+                              <strong style="font-size: 14px;"><?php //echo $data['total_spt'];?></strong>
+                          </div> -->
                           <!-- Kotak Total SPPD -->
                           <div class="px-3 py-1 bg-light rounded border-start border-success border-3 text-center shadow-sm">
                               <span style="font-size: 11px;" class="text-muted">TOTAL SPPD: </span>
-                              <strong style="font-size: 14px;">85</strong>
+                              <strong style="font-size: 14px;"><?php //echo $data['total_sppd'];?></strong>
                               </div>
                           </div>
                       </div>
@@ -125,7 +126,7 @@ ob_start();
 <script>
   const cadilChartOptions = {
     series: [
-      { name: 'SPT (Tugas)', data: [8, 12, 10, 14, 18, 16, 0, 0, 0, 0, 0, 0] },
+      // { name: 'SPT (Tugas)', data: [8, 12, 10, 14, 18, 16, 0, 0, 0, 0, 0, 0] },
       { name: 'SPPD (Perjalanan)', data: [6, 9, 8, 11, 13, 10, 0, 0, 0, 0, 0, 0] },
     ],
     chart: { type: 'line', height: 340, toolbar: { show: false } },

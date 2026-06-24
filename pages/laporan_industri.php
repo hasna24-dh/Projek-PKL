@@ -1,5 +1,5 @@
 <?php
-$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+$url="http://192.168.34.169/satukan.jiwa/dbes-ikm/index.php/api_dashboard"; //.../dbes-ikm";
 $response=file_get_contents($url);
 $data=json_decode($response,true);
 ?>   
@@ -36,7 +36,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-danger h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">1250</h3>
+                    <h3 class="fw-bold"><?php //echo $data['total_ikm'];?></h3>
                     <p>Jumlah IKM</p>
                   </div>
                   <i class="small-box-icon bi bi-buildings-fill"></i>
@@ -45,7 +45,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-success h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">62%</h3>
+                    <h3 class="fw-bold"><?php //echo $data['ikm_kecil'];?></h3>
                     <p>Skala Industri Kecil</p>
                   </div>
                   <i class="small-box-icon bi bi-person-workspace"></i>
@@ -54,7 +54,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">24%</h3>
+                    <h3 class="fw-bold"><?php //echo $data['ikm_menengah'];?></h3>
                     <p>Skala Industri Menengah</p>
                   </div>
                   <i class="small-box-icon bi bi-graph-up-arrow"></i>
@@ -63,7 +63,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-warning h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold">14%</h3>
+                    <h3 class="fw-bold"><?php //echo $data['ikm_besar'];?></h3>
                     <p>Skala Industri Besar</p>
                   </div>
                   <i class="small-box-icon bi bi-building"></i>
@@ -153,7 +153,7 @@ ob_start();
 <script>
   // Skala Industri chart (donut)
   const skalaIndustriOptions = {
-    series: [62, 24, 14],
+    series: [<?php //echo $data['ikm_kecil'];?>, <?php //echo $data['ikm_menengah'];?>, <?php //echo $data['ikm_besar'];?>],
     chart: { type: 'donut', height: 320 },
     labels: ['Kecil', 'Menengah', 'Besar'],
     colors: ['#0d6efd', '#198754', '#ffc107'],
@@ -173,7 +173,7 @@ ob_start();
 
   // Jumlah IKM chart (bar)
   const jumlahIkmOptions = {
-    series: [{ name: 'Jumlah IKM', data: [775, 300, 175] }],
+    series: [{ name: 'Jumlah IKM', data: [<?php //echo $data['ikm_kecil'];?>, <?php //echo $data['ikm_menengah'];?>, <?php //echo $data['ikm_besar'];?>] }],
     chart: { type: 'bar', height: 280, toolbar: { show: false } },
     plotOptions: { bar: { horizontal: true, borderRadius: 6, dataLabels: { position: 'center' }, offsetY:45, offsetX: -15 } },
     dataLabels: { enabled: true, formatter: function (val) { return val; }, style: { colors: ['#ffffff'] }},
@@ -183,49 +183,32 @@ ob_start();
   };
   new ApexCharts(document.querySelector('#jumlah-ikm-chart'), jumlahIkmOptions).render();
 
-  // ==============================================================================
-  // DATA DUMMY 28 JENIS KBLI (Sesuai Gambar 1)
-  // ==============================================================================
-  const allKbliData = [
-    { category: '10 Industri Makanan', value: 350 },
-    { category: '11 Industri Minuman', value: 210 },
-    { category: '12 Industri Pengolahan Tembakau', value: 45 },
-    { category: '13 Industri Tekstil', value: 180 },
-    { category: '14 Industri Pakaian Jadi', value: 420 },
-    { category: '15 Industri Kulit & Alas Kaki', value: 150 },
-    { category: '16 Industri Kayu & Barang dari Kayu', value: 200 },
-    { category: '17 Industri Kertas', value: 85 },
-    { category: '18 Industri Pencetakan', value: 110 },
-    { category: '19 Industri Produk Batubara & Pengilangan', value: 30 },
-    { category: '20 Industri Bahan Kimia', value: 140 },
-    { category: '21 Industri Farmasi & Obat', value: 95 },
-    { category: '22 Industri Karet & Plastik', value: 175 },
-    { category: '23 Industri Barang Galian Bukan Logam', value: 220 },
-    { category: '24 Industri Logam Dasar', value: 65 },
-    { category: '25 Industri Barang Logam', value: 130 },
-    { category: '26 Industri Komputer & Elektronik', value: 80 },
-    { category: '27 Industri Peralatan Listrik', value: 90 },
-    { category: '28 Industri Mesin & Perlengkapan', value: 105 },
-    { category: '29 Industri Kendaraan Bermotor', value: 55 },
-    { category: '30 Industri Alat Angkut Lainnya', value: 40 },
-    { category: '31 Industri Furnitur', value: 280 },
-    { category: '32 Industri Pengolahan Lainnya', value: 160 },
-    { category: '33 Jasa Reparasi & Pemasangan Mesin', value: 125 },
-    { category: 'KBLI Tambahan 25', value: 50 },
-    { category: 'KBLI Tambahan 26', value: 45 },
-    { category: 'KBLI Tambahan 27', value: 35 },
-    { category: 'KBLI Tambahan 28', value: 20 }
-  ];
 
   // ==============================================================================
-  // LOGIKA MANAJEMEN DATA & PAGINASI CHART KBLI
+  // 1. AKUISISI & TRANSFORMASI DATA API (Data Mapping)
+  // ==============================================================================
+  // Mengambil string JSON yang didistribusikan oleh Controller PHP
+  // Pastikan variabel $data['sebaran_kbli'] sudah melalui fungsi json_encode() di Controller
+  const rawKbliData = <?php echo $data['kbli']; ?>;
+
+  // Melakukan transformasi struktur dari format Database ke format ApexCharts
+  const allKbliData = rawKbliData.map(item => ({
+    // Menggabungkan ID dan Nama sebagai label kategori
+    category: item.id_kbli + ' ' + item.nama_kbli, 
+    // Memastikan kuantitas dibaca sebagai integer (bilangan bulat)
+    value: parseInt(item.jml, 10) 
+  }));
+
+  // ==============================================================================
+  // 2. LOGIKA MANAJEMEN DATA & PAGINASI CHART KBLI
   // ==============================================================================
   
-  // Variabel untuk menampung data yang sedang aktif (bisa diurutkan atau bawaan)
+  // Variabel state untuk menampung data yang sedang aktif
   let activeKbliData = [...allKbliData]; 
   
   let currentKbliPage = 1;
   const itemsPerKbliPage = 10; 
+  // Kalkulasi total halaman secara dinamis berdasarkan panjang data API
   let totalKbliPages = Math.ceil(activeKbliData.length / itemsPerKbliPage);
 
   // Variabel state untuk melacak mode pengurutan saat ini 
@@ -236,7 +219,8 @@ ob_start();
   function getPaginatedKbliData(page) {
     const startIndex = (page - 1) * itemsPerKbliPage;
     const endIndex = startIndex + itemsPerKbliPage;
-    // Menggunakan activeKbliData yang sudah disalin, bukan allKbliData
+    
+    // Menggunakan activeKbliData yang merepresentasikan state terkini
     const slicedData = activeKbliData.slice(startIndex, endIndex);
 
     return {
@@ -245,10 +229,12 @@ ob_start();
     };
   }
 
-  // Inisialisasi Data Halaman Pertama
+  // Inisialisasi state halaman pertama
   const initialKbliData = getPaginatedKbliData(currentKbliPage);
 
-  // Konfigurasi ApexCharts Horizontal
+  // ==============================================================================
+  // 3. KONFIGURASI & RENDERING APEXCHARTS
+  // ==============================================================================
   const perJenisKbliOptions = {
     series: [{ name: 'Jumlah IKM', data: initialKbliData.seriesData }],
     chart: { type: 'bar', height: 400, toolbar: { show: false } },
@@ -259,7 +245,7 @@ ob_start();
         dataLabels: { position: 'top' }, 
       } 
     },
-    colors: ['#198754'], // Warna diubah menjadi hijau (Success Bootstrap)
+    colors: ['#198754'], // Representasi warna hijau (Success Bootstrap)
     dataLabels: { 
       enabled: true,
       offsetX: 25, 
@@ -285,7 +271,7 @@ ob_start();
   kbliChart.render();
 
   // ==============================================================================
-  // EVENT LISTENER: PAGINASI, SORTING (TOGGLE) & REFRESH
+  // 4. EVENT LISTENER: PAGINASI, SORTING (TOGGLE) & REFRESH
   // ==============================================================================
   const btnPrevKbli = document.getElementById('btn-prev-kbli');
   const btnNextKbli = document.getElementById('btn-next-kbli');
@@ -319,44 +305,39 @@ ob_start();
     }
   });
 
-  // Event: Urutkan dengan sistem Toggle (Terbanyak <-> Terkecil)
-  // Memastikan ID yang dipanggil adalah 'btn-sort-kbli'
+  // Event: Pengurutan Dinamis (Ascending / Descending)
   document.getElementById('btn-sort-kbli').addEventListener('click', function() {
-    // Mencari elemen ikon <i> di dalam tombol ini
     const iconSort = this.querySelector('i');
 
     if (!isAscending) {
-      // Aksi 1: Urutkan dari Terkecil ke Terbesar (Ascending)
+      // Ascending (Terkecil ke Terbesar)
       activeKbliData = [...allKbliData].sort((a, b) => a.value - b.value);
       
-      // Ubah ikon panah menjadi menghadap ke atas
       if (iconSort) {
         iconSort.classList.remove('bi-sort-down');
         iconSort.classList.add('bi-sort-up');
       }
-      isAscending = true; // Perbarui status ke Ascending
+      isAscending = true; 
     } else {
-      // Aksi 2: Urutkan dari Terbesar ke Terkecil (Descending)
+      // Descending (Terbesar ke Terkecil)
       activeKbliData = [...allKbliData].sort((a, b) => b.value - a.value);
       
-      // Ubah ikon panah kembali menghadap ke bawah
       if (iconSort) {
         iconSort.classList.remove('bi-sort-up');
         iconSort.classList.add('bi-sort-down');
       }
-      isAscending = false; // Perbarui status ke Descending
+      isAscending = false; 
     }
 
-    currentKbliPage = 1; // Memaksa kembali ke halaman 1 setelah diurutkan
+    currentKbliPage = 1; 
     updateKbliChart();
   });
 
-  // Event: Refresh / Kembalikan ke Susunan Awal
+  // Event: Restorasi ke Susunan Default Basis Data
   document.getElementById('btn-reset-kbli').addEventListener('click', () => {
-    // 1. Mengembalikan data aktif menjadi salinan data asli
+    // Merestorasi data ke struktur aslinya
     activeKbliData = [...allKbliData];
     
-    // 2. Kembalikan status variabel dan mereset ikon ke kondisi semula
     isAscending = false;
     const iconSort = document.querySelector('#btn-sort-kbli i');
     if (iconSort) {
@@ -364,12 +345,11 @@ ob_start();
       iconSort.classList.add('bi-sort-down');
     }
 
-    // 3. Render ulang dari halaman pertama
     currentKbliPage = 1; 
     updateKbliChart();
   });
 
-  // Panggil sekali saat halaman dimuat untuk mengatur status awal tombol
+  // Inisialisasi User Interface pada saat pemuatan pertama (onload)
   updateKbliPaginationUI();
 </script>
 <?php
