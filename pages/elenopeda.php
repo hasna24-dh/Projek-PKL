@@ -1,5 +1,5 @@
 <?php
-$url="http://192.168.34.169:8080/satukan.jiwa/elenopeda/index.php/api_dashboard"; //udah sesuai
+$url="http://192.168.34.169:8080/npd/index.php/api_dashboard"; //udah sesuai
 $response=file_get_contents($url);
 $data=json_decode($response,true);
 ?>      
@@ -36,7 +36,7 @@ $data=json_decode($response,true);
             <div class="col-xl-4 col-lg-4 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-primary h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;"><?php //echo $data['total_dana'];?></h3>
+                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;">Rp. <?php echo number_format($data['total_dana'], 0, ',', '.');?></h3>
                         <p class="text-nowrap" style="font-size: 0.9rem; margin-bottom: 0;">Total Pengajuan Dana</p>
                     </div>
                     <i class="small-box-icon text-bg-primary bi bi-cash-stack"></i>
@@ -46,7 +46,7 @@ $data=json_decode($response,true);
             <div class="col-xl-2 col-lg-2 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-warning h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold"><?php //echo $data['total_npd'];?></h3>
+                        <h3 class="fw-bold"><?php echo $data['total_npd'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">Total NPD</p>
                     </div>
                     <i class="small-box-icon bi bi-file-earmark-text-fill"></i>
@@ -56,7 +56,8 @@ $data=json_decode($response,true);
             <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-success h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold"><?php //echo $data['npd_verifikasi'];?></h3>
+
+                        <h3 class="fw-bold"><?php echo $data['npd_verifikasi'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Terverifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-check-fill"></i>
@@ -66,7 +67,7 @@ $data=json_decode($response,true);
             <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-danger h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold"><?php //echo $data['npd_belum'];?></h3>
+                        <h3 class="fw-bold"><?php echo $data['npd_belum'];?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Belum Verifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-exclamation-fill"></i>
@@ -149,7 +150,7 @@ ob_start();
 document.addEventListener("DOMContentLoaded", () => {
   // Chart 1: Status Verifikasi NPD (Donut Chart)
   const chartVerifikasiOptions = {
-    series: [<?php //echo $data['npd_verifikasi'];?>, <?php //echo $data['npd_belum'];?>], // Data: [Terverifikasi, Belum Terverifikasi]
+    series: [<?php echo $data['npd_verifikasi'];?>, <?php echo $data['npd_belum'];?>], // Data: [Terverifikasi, Belum Terverifikasi]
     chart: { type: 'donut', height: 320 },
     labels: ['NPD Terverifikasi', 'NPD Belum Verifikasi'],
     colors: ['#198754', '#dc3545'], 
@@ -186,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartStrukturOptions = {
     series: [{
       name: 'Jumlah',
-      data: [<?php //echo $data['jml_program'];?>, <?php //echo $data['jml_kegiatan'];?>, <?php //echo $data['jml_sub_kegiatan'];?>] // Data: [Program, Kegiatan, Sub Kegiatan]
+      data: [<?php echo $data['jml_program'];?>, <?php echo $data['jml_kegiatan'];?>, <?php echo $data['jml_sub_kegiatan'];?>] // Data: [Program, Kegiatan, Sub Kegiatan]
     }],
     chart: {  type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: {  borderRadius: 4,  horizontal: false, columnWidth: '50%', } },
