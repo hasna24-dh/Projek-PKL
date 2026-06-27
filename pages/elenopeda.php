@@ -1,7 +1,20 @@
 <?php
-$url="http://192.168.34.169:8080/npd/index.php/api_dashboard"; //udah sesuai
-$response=file_get_contents($url);
-$data=json_decode($response,true);
+// Menggunakan fungsi baru untuk mengambil data dengan fallback cache
+$api_url = "http://192.168.34.169:8080/npd/index.php/api_dashboard";
+$result = get_data_with_cache($koneksi_utama, $api_url, 'elenopeda_data');
+
+$data = $result['data'];
+$is_offline = $result['source'] === 'cache';
+$last_updated = $result['last_updated'] ? date('d M Y, H:i', strtotime($result['last_updated'])) : 'N/A';
+
+// Memberikan nilai default untuk mencegah error
+$total_dana = $data['total_dana'] ?? 0;
+$total_npd = $data['total_npd'] ?? 0;
+$npd_verifikasi = $data['npd_verifikasi'] ?? 0;
+$npd_belum = $data['npd_belum'] ?? 0;
+$jml_program = $data['jml_program'] ?? 0;
+$jml_kegiatan = $data['jml_kegiatan'] ?? 0;
+$jml_sub_kegiatan = $data['jml_sub_kegiatan'] ?? 0;
 ?>      
       <main class="app-main">
         <div class="app-content-header">
@@ -10,20 +23,15 @@ $data=json_decode($response,true);
               <div class="col-sm-6">
                 <h3 class="mb-0 fw-bold">ELENOPEDA</h3>
               </div>
-              <div class="col-sm-6 text-end">
-                <div class="col-12 d-flex justify-content-end align-items-center gap-2">
-                <!-- Input Group Kalender -->
-                <!-- <div class="input-group input-group-sm" style="max-width: 180px;">
-                    <span class="input-group-text bg-white border-end-0" id="date-filter-icon">
-                        <i class="bi bi-calendar-event text-muted"></i>
-                    </span>
-                    <input type="date" id="elenopeda-date-filter" class="form-control border-start-0 ps-0 text-muted" value="<?= date('Y-m-d') ?>" aria-describedby="date-filter-icon">
-                </div> -->
-                <!-- Tombol Filter Utama -->
-                <!-- <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">
-                    <span>Filter</span>
-                </button> -->
-                </div>
+              <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                <?php if ($is_offline): ?>
+                  <span class="badge text-bg-warning me-2" data-bs-toggle="tooltip" title="Menampilkan data offline yang tersimpan.">
+                    <i class="bi bi-wifi-off"></i> OFFLINE
+                  </span>
+                <?php endif; ?>
+                <small class="text-muted">
+                  Update Terakhir: <?php echo $last_updated; ?>
+                </small>
               </div>
             </div>
           </div>
@@ -36,7 +44,7 @@ $data=json_decode($response,true);
             <div class="col-xl-4 col-lg-4 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-primary h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;">Rp. <?php echo number_format($data['total_dana'], 0, ',', '.');?></h3>
+                        <h3 class="fw-bold text-nowrap" style="font-size: 1.4rem; margin-bottom: 5px;">Rp. <?php echo number_format($total_dana, 0, ',', '.');?></h3>
                         <p class="text-nowrap" style="font-size: 0.9rem; margin-bottom: 0;">Total Pengajuan Dana</p>
                     </div>
                     <i class="small-box-icon text-bg-primary bi bi-cash-stack"></i>
@@ -46,7 +54,7 @@ $data=json_decode($response,true);
             <div class="col-xl-2 col-lg-2 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-warning h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold"><?php echo $data['total_npd'];?></h3>
+                        <h3 class="fw-bold"><?php echo $total_npd;?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">Total NPD</p>
                     </div>
                     <i class="small-box-icon bi bi-file-earmark-text-fill"></i>
@@ -57,7 +65,7 @@ $data=json_decode($response,true);
                 <div class="small-box text-bg-success h-100 m-0 shadow-sm w-100">
                     <div class="inner">
 
-                        <h3 class="fw-bold"><?php echo $data['npd_verifikasi'];?></h3>
+                        <h3 class="fw-bold"><?php echo $npd_verifikasi;?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Terverifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-check-fill"></i>
@@ -67,7 +75,7 @@ $data=json_decode($response,true);
             <div class="col-xl-3 col-lg-3 col-md-6 col-12 d-flex">
                 <div class="small-box text-bg-danger h-100 m-0 shadow-sm w-100">
                     <div class="inner">
-                        <h3 class="fw-bold"><?php echo $data['npd_belum'];?></h3>
+                        <h3 class="fw-bold"><?php echo $npd_belum;?></h3>
                         <p style="font-size: 0.9rem; margin-bottom: 0;">NPD Belum Verifikasi</p>
                     </div>
                     <i class="small-box-icon bi bi-patch-exclamation-fill"></i>
@@ -105,7 +113,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #0d6efd; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_program'];?></h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $jml_program;?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Program</p>
                       </div>
                       <div class="text-primary">
@@ -118,7 +126,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #198754; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_kegiatan'];?></h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $jml_kegiatan;?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Kegiatan</p>
                       </div>
                       <div class="text-success">
@@ -131,7 +139,7 @@ $data=json_decode($response,true);
               <div class="col-xl-4 col-md-4 col-12 d-flex">
                   <div class="card w-100 h-100 m-0 shadow-sm p-4" style="border-left: 5px solid #dc3545; border-radius: 12px 4px 4px 12px; border-top: none; border-right: none; border-bottom: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 95px; background-color: #fff;">
                       <div>
-                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $data['jml_sub_kegiatan'];?></h3>
+                          <h3 class="fw-bold" style="color: #212529; margin-bottom: 4px; font-size: 1.75rem; line-height: 1.1;"><?php echo $jml_sub_kegiatan;?></h3>
                           <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0; font-weight: bold;">Jumlah Sub Kegiatan</p>
                       </div>
                       <div class="text-danger">
@@ -150,7 +158,7 @@ ob_start();
 document.addEventListener("DOMContentLoaded", () => {
   // Chart 1: Status Verifikasi NPD (Donut Chart)
   const chartVerifikasiOptions = {
-    series: [<?php echo $data['npd_verifikasi'];?>, <?php echo $data['npd_belum'];?>], // Data: [Terverifikasi, Belum Terverifikasi]
+    series: [<?php echo $npd_verifikasi;?>, <?php echo $npd_belum;?>], // Data: [Terverifikasi, Belum Terverifikasi]
     chart: { type: 'donut', height: 320 },
     labels: ['NPD Terverifikasi', 'NPD Belum Verifikasi'],
     colors: ['#198754', '#dc3545'], 
@@ -187,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartStrukturOptions = {
     series: [{
       name: 'Jumlah',
-      data: [<?php echo $data['jml_program'];?>, <?php echo $data['jml_kegiatan'];?>, <?php echo $data['jml_sub_kegiatan'];?>] // Data: [Program, Kegiatan, Sub Kegiatan]
+      data: [<?php echo $jml_program;?>, <?php echo $jml_kegiatan;?>, <?php echo $jml_sub_kegiatan;?>] // Data: [Program, Kegiatan, Sub Kegiatan]
     }],
     chart: {  type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: {  borderRadius: 4,  horizontal: false, columnWidth: '50%', } },

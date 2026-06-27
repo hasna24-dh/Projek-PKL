@@ -1,7 +1,17 @@
 <?php
-$url="http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
-$response=file_get_contents($url);
-$data=json_decode($response,true);
+// Menggunakan fungsi baru untuk mengambil data dengan fallback cache
+$api_url = "http://192.168.34.169/satukan.jiwa/sesuk/index.php/api_dashboard";
+$result = get_data_with_cache($koneksi_utama, $api_url, 'sesuk_data');
+
+$data = $result['data'];
+$is_offline = $result['source'] === 'cache';
+$last_updated = $result['last_updated'] ? date('d M Y, H:i', strtotime($result['last_updated'])) : 'N/A';
+
+// Memberikan nilai default untuk mencegah error jika data benar-benar kosong
+$jml_surat_masuk = $data['jml_surat_masuk'] ?? 0;
+$jml_surat_keluar = $data['jml_surat_keluar'] ?? 0;
+$jml_disposisi = $data['jml_disposisi'] ?? 0;
+$belum_disposisi = $jml_surat_masuk - $jml_disposisi;
 ?>
 <main class="app-main">
         <div class="app-content-header">
@@ -10,20 +20,15 @@ $data=json_decode($response,true);
               <div class="col-sm-6">
                 <h3 class="mb-0 fw-bold">SESUK</h3>
               </div>
-              <div class="col-sm-6 text-end">
-                <div class="col-12 d-flex justify-content-end align-items-center gap-2">
-                <!-- Input Group Kalender -->
-                <!-- <div class="input-group input-group-sm" style="max-width: 180px;">
-                    <span class="input-group-text bg-white border-end-0" id="date-filter-icon">
-                        <i class="bi bi-calendar-event text-muted"></i>
-                    </span>
-                    <input type="date" id="elenopeda-date-filter" class="form-control border-start-0 ps-0 text-muted" value="<?= date('Y-m-d') ?>" aria-describedby="date-filter-icon">
-                </div> -->
-                <!-- Tombol Filter Utama -->
-                <!-- <button class="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1" type="button" style="height: 31px;">  
-                    <span>Filter</span>
-                </button> -->
-                </div>
+              <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                <?php if ($is_offline): ?>
+                  <span class="badge text-bg-warning me-2" data-bs-toggle="tooltip" title="Menampilkan data offline yang tersimpan.">
+                    <i class="bi bi-wifi-off"></i> OFFLINE
+                  </span>
+                <?php endif; ?>
+                <small class="text-muted">
+                  Update Terakhir: <?php echo $last_updated; ?>
+                </small>
               </div>
             </div>
           </div> 
@@ -31,12 +36,13 @@ $data=json_decode($response,true);
 
         <div class="app-content">
           <div class="container-fluid">
+            
             <!-- Row: Key summary -->
             <div class="row d-flex align-items-stretch">
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-primary h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php echo $data['jml_surat_masuk'];?></h3>
+                    <h3 class="fw-bold"><?php echo $jml_surat_masuk;?></h3>
                     <p>Total Surat Masuk</p>
                   </div>
                   <i class="small-box-icon bi bi-inbox-fill"></i>
@@ -46,7 +52,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-success h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php echo $data['jml_surat_keluar'];?></h3>
+                    <h3 class="fw-bold"><?php echo $jml_surat_keluar;?></h3>
                     <p>Total Surat Keluar</p>
                   </div>
                   <i class="small-box-icon bi bi-box-arrow-up-right"></i>
@@ -56,7 +62,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-warning h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php echo $data['jml_disposisi'];?></h3>
+                    <h3 class="fw-bold"><?php echo $jml_disposisi;?></h3>
                     <p>Terdisposisi</p>
                   </div>
                   <i class="small-box-icon bi bi-person-check-fill"></i>
@@ -66,7 +72,7 @@ $data=json_decode($response,true);
               <div class="col-lg-3 col-6">
                 <div class="small-box text-bg-danger h-100 mb-0 shadow-sm">
                   <div class="inner">
-                    <h3 class="fw-bold"><?php echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?></h3>
+                    <h3 class="fw-bold"><?php echo $belum_disposisi;?></h3>
                     <p>Belum Terdisposisi</p>
                   </div>
                   <i class="small-box-icon bi bi-person-dash-fill"></i>
@@ -108,7 +114,7 @@ ob_start();
 <script>
   // Total Surat Masuk vs Keluar
   const chartSuratMasukKeluarOptions = {
-    series: [{ name: 'Jumlah Surat', data: [<?php echo $data['jml_surat_masuk'];?>, <?php echo $data['jml_surat_keluar'];?>] }],
+    series: [{ name: 'Jumlah Surat', data: [<?php echo $jml_surat_masuk;?>, <?php echo $jml_surat_keluar;?>] }],
     chart: { type: 'bar', height: 320, toolbar: { show: false } },
     plotOptions: { bar: { borderRadius: 6, horizontal: true } },
     colors: ['#0d6efd', '#198754'],
@@ -121,7 +127,7 @@ ob_start();
 
   // Terdisposisi vs Belum
   const chartTerdisposisiOptions = {
-    series: [<?php echo $data['jml_disposisi'];?>, <?php echo $data['jml_surat_masuk'] - $data['jml_disposisi'];?>], chart: { type: 'pie',  height: 320, },
+    series: [<?php echo $jml_disposisi;?>, <?php echo $belum_disposisi;?>], chart: { type: 'pie',  height: 320, },
     labels: ['Terdisposisi', 'Belum Terdisposisi'],
     colors: ['#ffc107', '#dc3545'],
     dataLabels: { enabled: true },

@@ -1,12 +1,16 @@
 <?php
-// Mengakuisisi data dari REST API
-$url="http://192.168.34.169/satukan.jiwa/cadil/index.php/api_dashboard"; //diganti dengan .../cadil
-$response=@file_get_contents($url);
-$data=json_decode($response,true);
+// Menggunakan fungsi baru untuk mengambil data dengan fallback cache
+$api_url = "http://192.168.34.169/satukan.jiwa/cadil/index.php/api_dashboard";
+$result = get_data_with_cache($koneksi_utama, $api_url, 'cadil_data');
 
-// Ekstraksi data API dengan penanganan nilai bawaan (fallback)
-$total_sppd  = isset($data['total_sppd']) ? $data['total_sppd'] : 0;
-$tabel_sppd  = isset($data['tabel_sppd']) ? $data['tabel_sppd'] : array();
+// Memisahkan hasil dari fungsi caching
+$data = $result['data'];
+$is_offline = $result['source'] === 'cache';
+$last_updated = $result['last_updated'] ? date('d M Y, H:i', strtotime($result['last_updated'])) : 'N/A';
+
+// Ekstraksi data dengan penanganan nilai bawaan (fallback) untuk mencegah error
+$total_sppd  = $data['total_sppd'] ?? 0;
+$tabel_sppd  = $data['tabel_sppd'] ?? [];
 $grafik_sppd = isset($data['grafik_sppd']) ? json_encode($data['grafik_sppd']) : json_encode(array_fill(0, 12, 0));
 ?>
 <style>
@@ -28,6 +32,16 @@ $grafik_sppd = isset($data['grafik_sppd']) ? json_encode($data['grafik_sppd']) :
                 <div class="col-sm-6">
                     <h3 class="mb-0 fw-bold">CATATAN DINAS LUAR</h3>
                 </div>
+                <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                  <?php if ($is_offline): ?>
+                    <span class="badge text-bg-warning me-2" data-bs-toggle="tooltip" title="Menampilkan data offline yang tersimpan.">
+                      <i class="bi bi-wifi-off"></i> OFFLINE
+                    </span>
+                  <?php endif; ?>
+                  <small class="text-muted">
+                    Update Terakhir: <?php echo $last_updated; ?>
+                  </small>
+                </div>
             </div>
         </div>
     </div>
@@ -43,14 +57,14 @@ $grafik_sppd = isset($data['grafik_sppd']) ? json_encode($data['grafik_sppd']) :
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="rounded-circle" style="width: 12px; height: 12px; background-color: #019875; display: inline-block;"></span>
+                                    <span class="rounded-circle" style="width: 12px; height: 12px; background-color: #00d6fd; display: inline-block;"></span>
                                     <span style="font-size: 13px; color: #475569;" class="fw-medium">SPPD (Perjalanan)</span>
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
                                 <div class="px-3 py-1 bg-light rounded border-start border-success border-3 text-center shadow-sm">
                                     <span style="font-size: 11px;" class="text-muted">TOTAL SPPD: </span>
-                                    <strong style="font-size: 14px;"><?php echo $data['total_sppd']; ?></strong>
+                                    <strong style="font-size: 14px;"><?php echo htmlspecialchars($total_sppd); ?></strong>
                                 </div>
                             </div>
                         </div>
@@ -64,14 +78,14 @@ $grafik_sppd = isset($data['grafik_sppd']) ? json_encode($data['grafik_sppd']) :
             <div class="col-12">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header">
-                        <h5 class="card-title fw-bold">Tabel Data Karyawan Dinas Luar</h5>
+                        <h5 class="card-title fw-bold mb-0">Tabel Data Karyawan Dinas Luar</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th style="width: 40px;">#</th>
+                                        <th style="width: 40px;">No</th>
                                         <th>Nama</th>
                                         <th>Jabatan</th>
                                         <th>Tempat Tujuan</th>
@@ -84,12 +98,12 @@ $grafik_sppd = isset($data['grafik_sppd']) ? json_encode($data['grafik_sppd']) :
                                     <?php if (!empty($tabel_sppd)): ?>
                                         <?php $no = 1; foreach ($tabel_sppd as $row): ?>
                                             <tr>
-                                                <td><?php echo $no++; ?></td>
+                                                <td class="text-center"><?php echo $no++; ?></td>
                                                 <td><?php echo htmlspecialchars($row['nama']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['jabatan']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['tempat_tujuan']); ?></td>
                                                 <td>SPPD</td>
-                                                <td><?php echo htmlspecialchars($row['tgl_berangkat']); ?></td>
+                                                <td><?php echo htmlspecialchars(date('d M Y', strtotime($row['tgl_brkt']))); ?></td>
                                                 <td><span class="badge text-bg-success">Terbit</span></td>
                                             </tr> 
                                         <?php endforeach; ?>
@@ -117,16 +131,17 @@ ob_start();
       // Konfigurasi SPT dibiarkan terkomentar sesuai instruksi
       // { name: 'SPT (Tugas)', data: [8, 12, 10, 14, 18, 16, 0, 0, 0, 0, 0, 0] },
       // Data SPPD diinjeksi secara dinamis
-      { name: 'SPPD (Perjalanan)', data: <?php echo $data['grafik_sppd']; ?> },
+      { name: 'SPPD (Perjalanan)', data: <?php echo $grafik_sppd; ?> },
     ],
     chart: { type: 'line', height: 340, toolbar: { show: false } },
-    colors: ['#00d6fd', '#198754'], // Skema warna asli dipertahankan
+    colors: ['#00d6fd'], // Menggunakan warna tunggal sesuai file baru
     stroke: { curve: 'smooth', width: 3 },
     markers: { size: 4 },
     xaxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'] },
     legend: { show: false, position: 'top',  horizontalAlign: 'left', offsetY: -10  },
     grid: { padding: {  top: 0 } },
-    yaxis: {  max: 19,  tickAmount: 4,  }, // Properti orisinal dipertahankan
+    // Batas sumbu Y dibuat dinamis dengan menghapus properti 'max'
+    yaxis: {  tickAmount: 4,  }, 
     dataLabels: { enabled: false },
     tooltip: { y: { formatter: (val) => `${val} Surat` } }
   };
